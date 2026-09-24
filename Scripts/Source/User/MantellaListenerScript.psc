@@ -147,6 +147,10 @@ Function CheckGameVersionForMantella()
         repository.isFO4VR = true
         debug.notification("Currently running "+ MantellaVersion+" VR")
         repository.microphoneEnabled = repository.isFO4VR
+    elseif repository.currentFO4version >= "1.11" && repository.currentFO4version < "1.12"
+        ; Anniversary Edition (1.11.137+). Papyrus compares strings alphabetically, so this accepts
+        ; every 1.11.x patch; the AE plugin builds use Address Library IDs rather than fixed offsets.
+        debug.notification("Currently running "+ MantellaVersion + " AE")
     else
         debug.messagebox("The current FO4 version doesn't support Mantella.")
     endif

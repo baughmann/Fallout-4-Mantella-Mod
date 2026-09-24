@@ -580,8 +580,14 @@ Event Onkeydown(int keycode)
         if keycode == startConversationkeycode
             if allowCrosshairTracking
                 float [] Actorxyz = TopicInfoPatcher.GetLastActorCoords()
-                CrosshairActor = Game.FindClosestActor(Actorxyz[0], Actorxyz[1], Actorxyz[2], 20.0)
-                Debug.Notification("Crosshair actor is: " + CrosshairActor.GetDisplayName())
+                if Actorxyz.Length == 3                 ; empty until an actor has been under the crosshair since load
+                    CrosshairActor = Game.FindClosestActor(Actorxyz[0], Actorxyz[1], Actorxyz[2], 20.0)
+                else
+                    CrosshairActor = none
+                endif
+                if CrosshairActor != none
+                    Debug.Notification("Crosshair actor is: " + CrosshairActor.GetDisplayName())
+                endif
             endif
             if CrosshairActor != none
                 String actorName = CrosshairActor.GetDisplayName()
