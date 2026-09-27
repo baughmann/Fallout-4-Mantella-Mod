@@ -1183,11 +1183,14 @@ Function CauseReassignmentOfParticipantAlias()
         MantellaConversationParticipantsQuest.Reset()
         MantellaConversationParticipantsQuest.Start()
         ; Utility.wait(1.0)
+        ; Decrement first: GetAt(GetSize()) is out of range (None), and index 0 was never evaluated.
         int i = Participants.GetSize()
         While i > 0
-            Actor tmpActor = Participants.GetAt(i) as Actor
-            tmpActor.EvaluatePackage(true)
             i -= 1
+            Actor tmpActor = Participants.GetAt(i) as Actor
+            if tmpActor
+                tmpActor.EvaluatePackage(true)
+            endif
         EndWhile
     endif
 EndFunction
@@ -1508,8 +1511,10 @@ actor function ClearAllFunctionTargets()
     actor currentActor
     While i < CurrentFunctionTargetArray.Length
         currentActor = CurrentFunctionTargetArray[i]
-        currentActor.SetFactionRank(MantellaFunctionTargetFaction,(-2))
-        currentActor.RemoveFromFaction(MantellaFunctionTargetFaction)
+        if currentActor                         ; unused target slots are None
+            currentActor.SetFactionRank(MantellaFunctionTargetFaction,(-2))
+            currentActor.RemoveFromFaction(MantellaFunctionTargetFaction)
+        endif
         i = i+1
     Endwhile
 endfunction

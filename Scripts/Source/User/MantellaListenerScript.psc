@@ -252,7 +252,10 @@ EndEvent
 
 Event OnItemAdded(Form akBaseItem, int aiItemCount, ObjectReference akItemReference, ObjectReference akSourceContainer)
     if Repository.playerTrackingOnItemAdded
-        string sourceName = akSourceContainer.getbaseobject().getname()
+        string sourceName = ""
+        if akSourceContainer                    ; None for spawned / quest-given items
+            sourceName = akSourceContainer.getbaseobject().getname()
+        endif
         if sourceName != "Power Armor" ;to prevent gameevent spam from the player entering power armors
             string itemName = akBaseItem.GetName()
             string itemPickedUpMessage = ""
@@ -352,7 +355,11 @@ endEvent
 Event OnItemEquipped(Form akBaseObject, ObjectReference akReference)
     if repository.playerTrackingOnObjectEquipped
         string itemEquipped = akBaseObject.getname()
-        string itemenchant = akBaseObject.GetEnchantment().getname()
+        string itemenchant = ""
+        Enchantment itemEnchantment = akBaseObject.GetEnchantment()
+        if itemEnchantment                      ; None for most gear; same result as before, without the log error
+            itemenchant = itemEnchantment.getname()
+        endif
         if itemenchant != "" ;filtering out enchantments to avoid spamming the LLM with confusing feedback
             ;Debug.MessageBox("The player equipped " + itemEquipped)
             if itemEquipped != "Mantella"

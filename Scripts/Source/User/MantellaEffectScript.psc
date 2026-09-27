@@ -52,7 +52,7 @@ endEvent
 ;will activate on dispel()
 Event OnEffectFinish(Actor target, Actor caster)
     ;debug.notification("Mantella has ended on "+target.getdisplayname())
-    DeactivateEventsFilters()
+    DeactivateEventsFilters(target)
 endEvent
 
 ;####################################################
@@ -105,9 +105,13 @@ Function ActivateEventsFilters()
     RegisterForHitEvent(GetTargetActor())
 EndFunction
 
-Function DeactivateEventsFilters()
+; Called from OnEffectFinish, where the effect is already gone and GetTargetActor() fails;
+; use the target the event hands us instead.
+Function DeactivateEventsFilters(Actor akTarget)
     RemoveAllInventoryEventFilters()
-    UnregisterForAllHitEvents(GetTargetActor())
+    if akTarget
+        UnregisterForAllHitEvents(akTarget)
+    endif
 EndFunction
 
 
