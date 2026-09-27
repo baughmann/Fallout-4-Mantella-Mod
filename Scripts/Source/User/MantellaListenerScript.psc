@@ -354,15 +354,12 @@ endEvent
 
 Event OnItemEquipped(Form akBaseObject, ObjectReference akReference)
     if repository.playerTrackingOnObjectEquipped
-        string itemEquipped = akBaseObject.getname()
-        string itemenchant = ""
-        Enchantment itemEnchantment = akBaseObject.GetEnchantment()
-        if itemEnchantment                      ; None for most gear; same result as before, without the log error
-            itemenchant = itemEnchantment.getname()
-        endif
-        if itemenchant != "" ;filtering out enchantments to avoid spamming the LLM with confusing feedback
-            ;Debug.MessageBox("The player equipped " + itemEquipped)
-            if itemEquipped != "Mantella"
+        ; Report every weapon and piece of apparel. (The old check, carried over from Skyrim, only
+        ; reported enchanted items, i.e. legendaries.) Aid items and chems also raise OnItemEquipped
+        ; when consumed, so anything that isn't a Weapon or Armor is skipped.
+        if akBaseObject is Weapon || akBaseObject is Armor
+            string itemEquipped = akBaseObject.getname()
+            if itemEquipped != "" && itemEquipped != "Mantella"
                 conversation.AddIngameEvent("The player equipped " + itemEquipped + ".")
             endif
         endif
