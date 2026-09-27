@@ -90,7 +90,9 @@ function showAndResolveTutorialMessage()
     int aButton=MantellaTutorialMessage.show()
     if aButton==1 ;player chose no
         repository.TriggerTutorialVariables(false)
-        Debug.MessageBox("You can reactivate the tutorial at any time by using the holotape in main settings.")
+        ; A notification, not a MessageBox: opening a MessageBox while the tutorial Message is still
+        ; closing left an invisible modal menu that swallowed movement/look input (seen on 1.11.240).
+        Debug.Notification("You can reactivate the tutorial at any time by using the holotape in main settings.")
     elseif aButton==0 ;player chose yes
         repository.TriggerTutorialVariables(true)
         
